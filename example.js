@@ -1,9 +1,8 @@
 const runshell = require('./index.js');
+const obj2args = require('obj2args');
 
-runshell('ls', {
-  args: ['-al'],
-  verbose: true
-}, (err, data) => {
+const args = obj2args({ _: ['-al'] });
+runshell('ls', { args }, (err, data) => {
   if (err) {
     return console.log(err);
   }
