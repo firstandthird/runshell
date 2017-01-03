@@ -10,7 +10,11 @@ module.exports = (commandName, options, callback) => {
     callback = options;
     options = {};
   }
-  const args = options.args || [];
+  let args = options.args || [];
+  // make sure args is an array:
+  if (typeof args === 'string') {
+    args = [args];
+  }
   options.env = options.env || {};
   options.cwd = options.cwd || process.cwd();
   const shellCommand = spawn(commandName, args, options);
