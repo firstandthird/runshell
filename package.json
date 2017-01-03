@@ -21,12 +21,13 @@
     "url": "https://github.com/firstandthird/runshell/issues"
   },
   "homepage": "https://github.com/firstandthird/runshell#readme",
-  "dependencies": {},
+  "dependencies": {
+    "obj2args": "1.0.0"
+  },
   "devDependencies": {
     "eslint": "^3.10.2",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^2.2.0",
-    "obj2args": "0.0.1"
+    "eslint-plugin-import": "^2.2.0"
   },
   "eslintConfig": {
     "extends": "firstandthird"

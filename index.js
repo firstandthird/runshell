@@ -1,4 +1,5 @@
 const spawn = require('child_process').spawn;
+const obj2args = require('obj2args');
 
 // see
 // https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
@@ -10,7 +11,7 @@ module.exports = (commandName, options, callback) => {
     callback = options;
     options = {};
   }
-  let args = options.args || [];
+  let args = options.args ? obj2args(options.args) : [];
   // make sure args is an array:
   if (typeof args === 'string') {
     args = [args];
