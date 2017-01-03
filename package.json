@@ -1,5 +1,5 @@
 {
-  "name": "run-shell",
+  "name": "runshell",
   "version": "0.0.6",
   "description": "Library to execute a shell command",
   "main": "index.js",
@@ -9,24 +9,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/firstandthird/run-shell.git"
+    "url": "git+https://github.com/firstandthird/runshell.git"
   },
   "keywords": [
     "shell",
-    "run-shell"
+    "runshell"
   ],
   "author": "First+Third <code@firstandthird.com> (http://firstandthird.com/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/firstandthird/run-shell/issues"
+    "url": "https://github.com/firstandthird/runshell/issues"
   },
-  "homepage": "https://github.com/firstandthird/run-shell#readme",
-  "dependencies": {
-  },
+  "homepage": "https://github.com/firstandthird/runshell#readme",
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^3.10.2",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "obj2args": "0.0.1"
   },
   "eslintConfig": {
     "extends": "firstandthird"
