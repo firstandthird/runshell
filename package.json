@@ -4,7 +4,7 @@
   "description": "Library to execute a shell command",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tape test/*.test.js",
     "lint": "eslint ."
   },
   "repository": {
@@ -27,7 +27,8 @@
   "devDependencies": {
     "eslint": "^3.10.2",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-import": "^2.2.0",
+    "tape": "^4.6.3"
   },
   "eslintConfig": {
     "extends": "firstandthird"
