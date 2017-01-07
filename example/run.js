@@ -1,7 +1,7 @@
 const runshell = require('../index.js');
 
-runshell('ls', {
-  args: '-al'
+runshell('tail', {
+  args: { f: 'index.js' }
 }, (err, data) => {
   if (err) {
     return console.log(err);
