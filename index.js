@@ -21,6 +21,8 @@ module.exports = (commandName, options, callback) => {
   options.cwd = options.cwd || process.cwd();
   let outputString = '';
   let errorString = '';
+  console.log('command:');
+  console.log(commandName);
   const shellCommand = spawn(commandName, args, options)
   .on('error', (data) => {
     errorString += data.toString();
