@@ -1,3 +1,4 @@
+'use strict';
 const test = require('tape');
 const path = require('path');
 const runshell = require('../index.js');
@@ -14,7 +15,7 @@ test('runs shell commands', (t) => {
 
 test('runs commands with args passed as object', (t) => {
   t.plan(5);
-  runshell(path.join(__dirname, 'test-shell'), {
+  runshell('./test/test-shell', {
     args: { v: 'another_thing', a: 'thing' }
   }, (err, dataStr) => {
     t.equal(err, null);

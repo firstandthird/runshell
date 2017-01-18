@@ -1,3 +1,4 @@
+'use strict';
 const runshell = require('../index.js');
 
 runshell('ls', {
