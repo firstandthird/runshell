@@ -3,7 +3,7 @@ const test = require('tape');
 const path = require('path');
 const runshell = require('../index.js');
 
-test('runs shell commands', (t) => {
+test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
@@ -15,7 +15,7 @@ test('runs shell commands', (t) => {
 });
 
 test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
+  runshell(path.join(__dirname, 'test-shell'), {
     env: process.env
   }, (err, dataStr) => {
     t.equal(err, null);
@@ -24,7 +24,7 @@ test('runs an executable script file', (t) => {
 });
 
 test('runs an executable with args passed as object', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
+  runshell(path.join(__dirname, 'test-shell'), {
     env: process.env,
     args: { v: 'another_thing', a: 'thing' }
   }, (err, dataStr, s3) => {
