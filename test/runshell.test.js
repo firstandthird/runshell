@@ -14,7 +14,7 @@ const runshell = require('../index.js');
 // });
 //
 test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
+  runshell(path.join('test', 'test-shell.js'), {
     shell: true
   }, (err, dataStr) => {
     t.equal(err, null);
