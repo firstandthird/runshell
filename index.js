@@ -21,8 +21,10 @@ module.exports = (commandName, options, callback) => {
   options.cwd = options.cwd || process.cwd();
   let outputString = '';
   let errorString = '';
-  console.log('command:');
-  console.log(commandName);
+  if (options.exec) {
+    args.unshift(commandName);
+    commandName = options.exec;
+  }
   const shellCommand = spawn(commandName, args, options)
   .on('error', (data) => {
     errorString += data.toString();
