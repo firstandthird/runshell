@@ -1,5 +1,5 @@
 before_script:
- - chmod +x test/test-shell
+ - chmod +x test/test-shell.js
 language: node_js
 node_js:
   - "6"
