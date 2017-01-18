@@ -13,12 +13,15 @@ test('runs shell commands', (t) => {
 });
 
 test('runs commands with args passed as object', (t) => {
-  t.plan(2);
-  runshell('node', {
-    args: { v: true }
-  }, (err, data) => {
+  t.plan(5);
+  runshell('test-shell', {
+    args: { v: 'another_thing', a: 'thing' }
+  }, (err, dataStr) => {
     t.equal(err, null);
-    t.equal(data, 'v6.7.0\r\n');
+    t.equal(dataStr.indexOf('-a') > -1, true);
+    t.equal(dataStr.indexOf('thing') > -1, true);
+    t.equal(dataStr.indexOf('-v') > -1, true);
+    t.equal(dataStr.indexOf('another_thing') > -1, true);
   });
 });
 
