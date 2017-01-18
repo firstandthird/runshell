@@ -22,12 +22,9 @@ module.exports = (commandName, options, callback) => {
   let outputString = '';
   let errorString = '';
   const shellCommand = spawn(commandName, args, options)
-  // collect normal output:
-  // collect error output:
   .on('error', (data) => {
     errorString += data.toString();
   })
-  // handle ending:
   .on('exit', (exitCode) => {
     const error = exitCode === 0 ? null : {
       exitCode,

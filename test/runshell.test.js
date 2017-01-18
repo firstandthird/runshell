@@ -13,10 +13,19 @@ test('runs shell commands', (t) => {
   });
 });
 
-test('runs commands with args passed as object', (t) => {
-  runshell(path.join(__dirname, 'test-shell'), {
+test('runs an executable script file', (t) => {
+  runshell('./test-shell', {
+    env: { PATH: __dirname }
+  }, (err, dataStr) => {
+    t.equal(err, null);
+    t.end();
+  });
+});
+
+test('runs an executable with args passed as object', (t) => {
+  runshell('test-shell', {
     args: { v: 'another_thing', a: 'thing' },
-    env: process.env
+    env: { PATH: __dirname }
   }, (err, dataStr) => {
     t.equal(err, null);
     t.equal(dataStr.indexOf('-a') > -1, true);
