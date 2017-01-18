@@ -3,39 +3,44 @@ const test = require('tape');
 const path = require('path');
 const runshell = require('../index.js');
 
-test('runs shell commands', (t) => {
-  t.plan(2);
-  runshell('node', {
-    args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env
-  }, (err, data) => {
-    t.equal(err, null);
-    t.equal(data, 'test\n');
-  });
-});
-
-test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
-    env: process.env
-  }, (err, dataStr) => {
-    t.equal(err, null);
-    t.end();
-  });
-});
-// test('runs an executable with args passed as object', (t) => {
-//   runshell(path.join(__dirname, 'test-shell.js'), {
-//     exec: 'node',
-//     args: { v: 'another_thing', a: 'thing' }
-//   }, (err, dataStr) => {
+// test('runs shell commands', (t) => {
+//   t.plan(2);
+//   runshell('node', {
+//     args: path.join(__dirname, 'expected', 'script1.js'),
+//     env: process.env
+//   }, (err, data) => {
 //     t.equal(err, null);
-//     t.equal(dataStr.indexOf('-a') > -1, true);
-//     t.equal(dataStr.indexOf('thing') > -1, true);
-//     t.equal(dataStr.indexOf('-v') > -1, true);
-//     t.equal(dataStr.indexOf('another_thing') > -1, true);
-//     t.end();
+//     t.equal(data, 'test\n');
 //   });
 // });
 //
+// test('runs an executable script file', (t) => {
+//   runshell(path.join(__dirname, 'test-shell.js'), {
+//     env: process.env
+//   }, (err, dataStr) => {
+//     t.equal(err, null);
+//     t.end();
+//   });
+// });
+
+test('runs an executable with args passed as object', (t) => {
+  runshell(path.join(__dirname, 'test-shell.js'), {
+    env: process.env,
+    args: { v: 'another_thing', a: 'thing' }
+  }, (err, dataStr, s3) => {
+    console.log('++++')
+    console.log(err)
+    console.log(dataStr)
+    console.log(s3)
+    t.equal(err, null);
+    t.equal(dataStr.indexOf('-a') > -1, true);
+    t.equal(dataStr.indexOf('thing') > -1, true);
+    t.equal(dataStr.indexOf('-v') > -1, true);
+    t.equal(dataStr.indexOf('another_thing') > -1, true);
+    t.end();
+  });
+});
+
 // test('handles errors', (t) => {
 //   t.plan(1);
 //   runshell('node', {

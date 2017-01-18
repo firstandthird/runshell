@@ -20,28 +20,6 @@ module.exports = (commandName, options, callback) => {
   }
   options.env = options.env || {};
   options.cwd = options.cwd || process.cwd();
-  let outputString = '';
-  let errorString = '';
-  if (options.exec) {
-    args.unshift(commandName);
-    commandName = options.exec;
-  }
   commandName = `${commandName} ${args.join(' ')}`;
-  console.log('command is:')
-  console.log(commandName)
-  // const shellCommand = spawn(commandName, args, options)
-  const shellCommand = exec(commandName, options, callback)
-  // .on('error', (data) => {
-  //   errorString += data.toString();
-  // })
-  // .on('exit', (exitCode) => {
-  //   const error = exitCode === 0 ? null : {
-  //     exitCode,
-  //     message: errorString
-  //   };
-  //   return callback(error, outputString);
-  // });
-  // shellCommand.stdout.on('data', (data) => {
-  //   outputString += data.toString();
-  // });
+  exec(commandName, options, callback);
 };
