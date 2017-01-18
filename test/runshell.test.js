@@ -15,7 +15,9 @@ test('runs shell commands', (t) => {
 });
 
 test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {}, (err, dataStr) => {
+  runshell(path.join(__dirname, 'test-shell.js'), {
+    env: process.env
+  }, (err, dataStr) => {
     t.equal(err, null);
     t.end();
   });
