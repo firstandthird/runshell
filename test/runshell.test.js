@@ -6,7 +6,8 @@ const runshell = require('../index.js');
 test('runs shell commands', (t) => {
   t.plan(2);
   runshell('node', {
-    args: path.join(__dirname, 'expected', 'script1.js')
+    args: path.join(__dirname, 'expected', 'script1.js'),
+    env: process.env
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -14,8 +15,8 @@ test('runs shell commands', (t) => {
 });
 
 test('runs an executable script file', (t) => {
-  runshell('./test-shell', {
-    env: { PATH: __dirname }
+  runshell(path.join(__dirname, 'test-shell.js'), {
+    env: process.env
   }, (err, dataStr) => {
     t.equal(err, null);
     t.end();
@@ -23,10 +24,10 @@ test('runs an executable script file', (t) => {
 });
 
 test('runs an executable with args passed as object', (t) => {
-  runshell('test-shell', {
-    args: { v: 'another_thing', a: 'thing' },
-    env: { PATH: __dirname }
-  }, (err, dataStr) => {
+  runshell(path.join(__dirname, 'test-shell.js'), {
+    env: process.env,
+    args: { v: 'another_thing', a: 'thing' }
+  }, (err, dataStr, s3) => {
     t.equal(err, null);
     t.equal(dataStr.indexOf('-a') > -1, true);
     t.equal(dataStr.indexOf('thing') > -1, true);
