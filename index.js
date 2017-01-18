@@ -1,5 +1,6 @@
 'use strict';
 const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 const obj2args = require('obj2args');
 
 // see
@@ -25,18 +26,22 @@ module.exports = (commandName, options, callback) => {
     args.unshift(commandName);
     commandName = options.exec;
   }
-  const shellCommand = spawn(commandName, args, options)
-  .on('error', (data) => {
-    errorString += data.toString();
-  })
-  .on('exit', (exitCode) => {
-    const error = exitCode === 0 ? null : {
-      exitCode,
-      message: errorString
-    };
-    return callback(error, outputString);
-  });
-  shellCommand.stdout.on('data', (data) => {
-    outputString += data.toString();
-  });
+  commandName = `${commandName} ${args.join(' ')}`;
+  console.log('command is:')
+  console.log(commandName)
+  // const shellCommand = spawn(commandName, args, options)
+  const shellCommand = exec(commandName, options, callback)
+  // .on('error', (data) => {
+  //   errorString += data.toString();
+  // })
+  // .on('exit', (exitCode) => {
+  //   const error = exitCode === 0 ? null : {
+  //     exitCode,
+  //     message: errorString
+  //   };
+  //   return callback(error, outputString);
+  // });
+  // shellCommand.stdout.on('data', (data) => {
+  //   outputString += data.toString();
+  // });
 };

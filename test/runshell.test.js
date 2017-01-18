@@ -6,7 +6,7 @@ const runshell = require('../index.js');
 test('runs shell commands', (t) => {
   t.plan(2);
   runshell('node', {
-    args: path.join(__dirname, 'expected', 'script1.js')
+    args: path.join(__dirname, 'expected', 'script1.js'),
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -14,32 +14,30 @@ test('runs shell commands', (t) => {
 });
 
 test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
-    exec: 'node'
-  }, (err, dataStr) => {
+  runshell(path.join(__dirname, 'test-shell.js'), {}, (err, dataStr) => {
     t.equal(err, null);
     t.end();
   });
 });
-test('runs an executable with args passed as object', (t) => {
-  runshell(path.join(__dirname, 'test-shell.js'), {
-    exec: 'node',
-    args: { v: 'another_thing', a: 'thing' }
-  }, (err, dataStr) => {
-    t.equal(err, null);
-    t.equal(dataStr.indexOf('-a') > -1, true);
-    t.equal(dataStr.indexOf('thing') > -1, true);
-    t.equal(dataStr.indexOf('-v') > -1, true);
-    t.equal(dataStr.indexOf('another_thing') > -1, true);
-    t.end();
-  });
-});
-
-test('handles errors', (t) => {
-  t.plan(1);
-  runshell('node', {
-    args: 'no!'
-  }, (err, data) => {
-    t.notEqual(err, null);
-  });
-});
+// test('runs an executable with args passed as object', (t) => {
+//   runshell(path.join(__dirname, 'test-shell.js'), {
+//     exec: 'node',
+//     args: { v: 'another_thing', a: 'thing' }
+//   }, (err, dataStr) => {
+//     t.equal(err, null);
+//     t.equal(dataStr.indexOf('-a') > -1, true);
+//     t.equal(dataStr.indexOf('thing') > -1, true);
+//     t.equal(dataStr.indexOf('-v') > -1, true);
+//     t.equal(dataStr.indexOf('another_thing') > -1, true);
+//     t.end();
+//   });
+// });
+//
+// test('handles errors', (t) => {
+//   t.plan(1);
+//   runshell('node', {
+//     args: 'no!'
+//   }, (err, data) => {
+//     t.notEqual(err, null);
+//   });
+// });
