@@ -19,23 +19,23 @@ module.exports = (commandName, options, callback) => {
   }
   options.env = options.env || {};
   options.cwd = options.cwd || process.cwd();
-  const shellCommand = spawn(commandName, args, options);
   let outputString = '';
   let errorString = '';
+  const shellCommand = spawn(commandName, args, options)
   // collect normal output:
-  shellCommand.stdout.on('data', (data) => {
-    outputString += data.toString();
-  });
   // collect error output:
-  shellCommand.stderr.on('data', (data) => {
+  .on('error', (data) => {
     errorString += data.toString();
-  });
+  })
   // handle ending:
-  shellCommand.on('close', (exitCode) => {
+  .on('exit', (exitCode) => {
     const error = exitCode === 0 ? null : {
       exitCode,
       message: errorString
     };
     return callback(error, outputString);
+  });
+  shellCommand.stdout.on('data', (data) => {
+    outputString += data.toString();
   });
 };

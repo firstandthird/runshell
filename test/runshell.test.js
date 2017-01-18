@@ -14,15 +14,16 @@ test('runs shell commands', (t) => {
 });
 
 test('runs commands with args passed as object', (t) => {
-  t.plan(5);
-  runshell('./test/test-shell', {
-    args: { v: 'another_thing', a: 'thing' }
+  runshell(path.join(__dirname, 'test-shell'), {
+    args: { v: 'another_thing', a: 'thing' },
+    env: process.env
   }, (err, dataStr) => {
     t.equal(err, null);
     t.equal(dataStr.indexOf('-a') > -1, true);
     t.equal(dataStr.indexOf('thing') > -1, true);
     t.equal(dataStr.indexOf('-v') > -1, true);
     t.equal(dataStr.indexOf('another_thing') > -1, true);
+    t.end();
   });
 });
 
