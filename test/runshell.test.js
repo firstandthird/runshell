@@ -14,7 +14,7 @@ test('runs shell commands', (t) => {
 
 test('runs commands with args passed as object', (t) => {
   t.plan(5);
-  runshell('test-shell', {
+  runshell(path.join(__dirname, 'test-shell'), {
     args: { v: 'another_thing', a: 'thing' }
   }, (err, dataStr) => {
     t.equal(err, null);
