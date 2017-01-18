@@ -1,10 +1,9 @@
 'use strict';
-const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
 const obj2args = require('obj2args');
 
 // see
-// https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+// https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
 // for additional options
 
 module.exports = (commandName, options, callback) => {
