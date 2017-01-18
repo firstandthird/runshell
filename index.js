@@ -1,9 +1,9 @@
 'use strict';
-const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 const obj2args = require('obj2args');
 
 // see
-// https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
+// https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
 // for additional options
 
 module.exports = (commandName, options, callback) => {
@@ -19,20 +19,6 @@ module.exports = (commandName, options, callback) => {
   }
   options.env = options.env || {};
   options.cwd = options.cwd || process.cwd();
-  let outputString = '';
-  let errorString = '';
-  const shellCommand = spawn(commandName, args, options)
-  .on('error', (data) => {
-    errorString += data.toString();
-  })
-  .on('exit', (exitCode) => {
-    const error = exitCode === 0 ? null : {
-      exitCode,
-      message: errorString
-    };
-    return callback(error, outputString);
-  });
-  shellCommand.stdout.on('data', (data) => {
-    outputString += data.toString();
-  });
+  commandName = `${commandName} ${args.join(' ')}`;
+  exec(commandName, options, callback);
 };
