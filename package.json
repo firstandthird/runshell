@@ -1,6 +1,6 @@
 {
   "name": "runshell",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Library to execute a shell command",
   "main": "index.js",
   "scripts": {
