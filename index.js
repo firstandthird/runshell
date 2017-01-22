@@ -20,5 +20,10 @@ module.exports = (commandName, options, callback) => {
   options.env = options.env || {};
   options.cwd = options.cwd || process.cwd();
   commandName = `${commandName} ${args.join(' ')}`;
-  exec(commandName, options, callback);
+  const output = exec(commandName, options, callback);
+  if (options.stream) {
+    output.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+  }
 };
