@@ -19,7 +19,7 @@ test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env
+    env: process.env,
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -27,15 +27,20 @@ test('runs shellmmands', (t) => {
 });
 
 test('can stream output', (t) => {
-  t.plan(2);
+  t.plan(3);
   const oldLog = console.log;
-  console.log();
+  const alldata = [];
+  console.log = (data) => {
+    alldata.push(data);
+  }
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env
+    env: process.env,
+    stream: true
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
+    t.equal(alldata[0], 'test\n');
   });
 });
 
