@@ -32,12 +32,13 @@ test('can stream output', (t) => {
   const alldata = [];
   console.log = (data) => {
     alldata.push(data);
-  }
+  };
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
     env: process.env,
     stream: true
   }, (err, data) => {
+    console.log = oldLog;
     t.equal(err, null);
     t.equal(data, 'test\n');
     t.equal(alldata[0], 'test\n');

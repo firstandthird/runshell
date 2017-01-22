@@ -25,5 +25,8 @@ module.exports = (commandName, options, callback) => {
     output.stdout.on('data', (data) => {
       console.log(data.toString());
     });
+    output.stderr.on('data', (data) => {
+      console.log(data.toString());
+    });
   }
 };
