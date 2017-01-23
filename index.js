@@ -19,7 +19,10 @@ module.exports = (commandName, options, callback) => {
   }
   // properties in options.env will over-ride the default process.env:
   if (options.env) {
+    console.log(options.env)
     options.env = Object.assign(process.env, options.env);
+    console.log('+')
+    console.log(options.env)
   } else {
     options.env = process.env;
   }
