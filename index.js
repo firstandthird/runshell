@@ -18,7 +18,7 @@ module.exports = (commandName, options, callback) => {
     args = [args];
   }
   if (options.env) {
-      Object.assign(options.env, process.env);
+    Object.assign(options.env, process.env);
   } else {
     options.env = process.env;
   }

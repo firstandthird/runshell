@@ -13,7 +13,6 @@ test('runs shellmmands', (t) => {
   });
 });
 
-
 test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
@@ -63,13 +62,19 @@ test('runs an executable with args passed as object', (t) => {
   });
 });
 
-test('layers process.env  args passed as object', (t) => {
+test('layers process.env into env', (t) => {
   process.env.firstandthird_runshell = '123';
   runshell(path.join(__dirname, 'test-shell2'), {
   }, (err, dataStr) => {
     t.equal(err, null);
     t.equal(dataStr, '123\n');
-    t.end();
+    runshell(path.join(__dirname, 'test-shell2'), {
+      env: { firstandthird_runshell: '345' }
+    }, (err2, dataStr2) => {
+      t.equal(err2, null);
+      t.equal(dataStr2, '345\n')
+      t.end();
+    });
   });
 });
 
