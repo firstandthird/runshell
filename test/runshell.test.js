@@ -63,16 +63,16 @@ test('runs an executable with args passed as object', (t) => {
 });
 
 test('layers process.env into env', (t) => {
-  process.env.firstandthird_runshell = '123';
   runshell(path.join(__dirname, 'test-shell2'), {
   }, (err, dataStr) => {
     t.equal(err, null);
-    t.equal(dataStr, '123\n');
+    t.equal(dataStr.indexOf(process.env.HOME) > -1, true);
     runshell(path.join(__dirname, 'test-shell2'), {
-      env: { firstandthird_runshell: '345' }
+      env: { firstandthird_runshell: 'firstandthird_runshell' }
     }, (err2, dataStr2) => {
       t.equal(err2, null);
-      t.equal(dataStr2, '345\n')
+      t.equal(dataStr2.indexOf(process.env.HOME) > -1, true);
+      t.equal(dataStr2.indexOf('firstandthird_runshell') > -1, true);
       t.end();
     });
   });
