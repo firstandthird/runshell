@@ -68,7 +68,7 @@ test('layers process.env  args passed as object', (t) => {
   runshell(path.join(__dirname, 'test-shell2'), {
   }, (err, dataStr) => {
     t.equal(err, null);
-    t.equal(dataStr, '123');
+    t.equal(dataStr, '123\n');
     t.end();
   });
 });
