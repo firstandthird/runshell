@@ -7,7 +7,6 @@ test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -19,7 +18,6 @@ test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env,
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -35,7 +33,6 @@ test('can stream output', (t) => {
   };
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env,
     stream: true
   }, (err, data) => {
     console.log = oldLog;
@@ -47,7 +44,6 @@ test('can stream output', (t) => {
 
 test('runs an executable script file', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
-    env: process.env
   }, (err, dataStr) => {
     t.equal(err, null);
     t.end();
@@ -56,14 +52,23 @@ test('runs an executable script file', (t) => {
 
 test('runs an executable with args passed as object', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
-    env: process.env,
     args: { v: 'another_thing', a: 'thing' }
-  }, (err, dataStr, s3) => {
+  }, (err, dataStr) => {
     t.equal(err, null);
     t.equal(dataStr.indexOf('-a') > -1, true);
     t.equal(dataStr.indexOf('thing') > -1, true);
     t.equal(dataStr.indexOf('-v') > -1, true);
     t.equal(dataStr.indexOf('another_thing') > -1, true);
+    t.end();
+  });
+});
+
+test('layers process.env  args passed as object', (t) => {
+  process.env.firstandthird_runshell = '123';
+  runshell(path.join(__dirname, 'test-shell2'), {
+  }, (err, dataStr) => {
+    t.equal(err, null);
+    t.equal(dataStr, '123');
     t.end();
   });
 });
