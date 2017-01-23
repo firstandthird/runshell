@@ -7,19 +7,16 @@ test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
   });
 });
 
-
 test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env,
   }, (err, data) => {
     t.equal(err, null);
     t.equal(data, 'test\n');
@@ -35,7 +32,6 @@ test('can stream output', (t) => {
   };
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    env: process.env,
     stream: true
   }, (err, data) => {
     console.log = oldLog;
@@ -47,7 +43,6 @@ test('can stream output', (t) => {
 
 test('runs an executable script file', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
-    env: process.env
   }, (err, dataStr) => {
     t.equal(err, null);
     t.end();
@@ -56,15 +51,37 @@ test('runs an executable script file', (t) => {
 
 test('runs an executable with args passed as object', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
-    env: process.env,
     args: { v: 'another_thing', a: 'thing' }
-  }, (err, dataStr, s3) => {
+  }, (err, dataStr) => {
     t.equal(err, null);
     t.equal(dataStr.indexOf('-a') > -1, true);
     t.equal(dataStr.indexOf('thing') > -1, true);
     t.equal(dataStr.indexOf('-v') > -1, true);
     t.equal(dataStr.indexOf('another_thing') > -1, true);
     t.end();
+  });
+});
+
+test('layers process.env into env', (t) => {
+  runshell(path.join(__dirname, 'test-shell2'), {
+  }, (err, dataStr) => {
+    t.equal(err, null);
+    t.equal(dataStr.indexOf(process.env.HOME) > -1, true, 'takes process.env by default');
+    runshell(path.join(__dirname, 'test-shell2'), {
+      env: { firstandthird_runshell: 'firstandthird_runshell' }
+    }, (err2, dataStr2) => {
+      t.equal(err2, null);
+      t.equal(dataStr2.indexOf(process.env.HOME) > -1, true);
+      t.equal(dataStr2.indexOf('firstandthird_runshell') > -1, true, 'combines process.env with passed env');
+      const oldHome = process.env.HOME;
+      runshell(path.join(__dirname, 'test-shell2'), {
+        env: { HOME: 'firstandthird_runshell' }
+      }, (err3, dataStr3) => {
+        t.equal(err3, null);
+        t.equal(dataStr3.indexOf(oldHome), -1, 'passed env will over-ride process.env');
+        t.end();
+      });
+    });
   });
 });
 

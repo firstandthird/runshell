@@ -17,7 +17,12 @@ module.exports = (commandName, options, callback) => {
   if (typeof args === 'string') {
     args = [args];
   }
-  options.env = options.env || {};
+  // properties in options.env will over-ride the default process.env:
+  if (options.env) {
+    options.env = Object.assign(process.env, options.env);
+  } else {
+    options.env = process.env;
+  }
   options.cwd = options.cwd || process.cwd();
   commandName = `${commandName} ${args.join(' ')}`;
   const output = exec(commandName, options, callback);
