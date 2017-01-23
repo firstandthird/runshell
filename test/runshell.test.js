@@ -23,7 +23,7 @@ test('runs shellmmands', (t) => {
   });
 });
 
-test('can stream output', (t) => {
+test('can log output', (t) => {
   t.plan(3);
   const oldLog = console.log;
   const alldata = [];
@@ -32,7 +32,7 @@ test('can stream output', (t) => {
   };
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-    stream: true
+    log: true
   }, (err, data) => {
     console.log = oldLog;
     t.equal(err, null);

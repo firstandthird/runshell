@@ -26,12 +26,12 @@ module.exports = (commandName, options, callback) => {
   options.cwd = options.cwd || process.cwd();
   commandName = `${commandName} ${args.join(' ')}`;
   const output = exec(commandName, options, callback);
-  if (options.stream) {
+  if (options.log) {
     output.stdout.on('data', (data) => {
-      console.log(data.toString());
+      console.log(data.toString()); // eslint-disable-line no-console
     });
     output.stderr.on('data', (data) => {
-      console.log(data.toString());
+      console.log(data.toString()); // eslint-disable-line no-console
     });
   }
 };
