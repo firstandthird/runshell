@@ -73,15 +73,17 @@ test('layers process.env into env', (t) => {
       t.equal(err2, null);
       t.equal(dataStr2.indexOf(process.env.HOME) > -1, true);
       t.equal(dataStr2.indexOf('firstandthird_runshell') > -1, true, 'combines process.env with passed env');
+      console.log('++++')
+      console.log('++++')
+      console.log('++++')
+      console.log('++++')
+      console.log(process.env.HOME)
       runshell(path.join(__dirname, 'test-shell2'), {
         env: { HOME: 'firstandthird_runshell' }
       }, (err3, dataStr3) => {
         t.equal(err3, null);
-        console.log('++++')
-        console.log('++++')
-        console.log('++++')
-        console.log('++++')
         console.log(dataStr3);
+        console.log(process.env.HOME)
         t.equal(dataStr3.indexOf(process.env.HOME), -1, 'passed env will over-ride process.env');
         t.end();
       });
