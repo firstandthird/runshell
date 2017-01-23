@@ -77,6 +77,11 @@ test('layers process.env into env', (t) => {
         env: { HOME: 'firstandthird_runshell' }
       }, (err3, dataStr3) => {
         t.equal(err3, null);
+        console.log('++++')
+        console.log('++++')
+        console.log('++++')
+        console.log('++++')
+        console.log(dataStr3);
         t.equal(dataStr3.indexOf(process.env.HOME), -1, 'passed env will over-ride process.env');
         t.end();
       });
