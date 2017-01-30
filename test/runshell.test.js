@@ -2,7 +2,7 @@
 const test = require('tape');
 const path = require('path');
 const runshell = require('../index.js');
-/*
+
 test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
@@ -61,19 +61,17 @@ test('runs an executable with args passed as object', (t) => {
     t.end();
   });
 });
-*/
 
 test('handles the "timeout" option', (t) => {
   runshell(path.join(__dirname, 'test-shell-timeout'), {
     timeout: 1000
   }, (err, dataStr) => {
-    console.log(err);
-    console.log(dataStr)
     t.notEqual(err);
+    t.equal(err.signal, 'SIGTERM');
     t.end();
   });
 });
-/*
+
 test('layers process.env into env', (t) => {
   runshell(path.join(__dirname, 'test-shell2'), {
   }, (err, dataStr) => {
@@ -105,4 +103,3 @@ test('handles errors', (t) => {
     t.notEqual(err, null);
   });
 });
-*/
