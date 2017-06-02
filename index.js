@@ -25,6 +25,9 @@ module.exports = (commandName, options, callback) => {
   }
   options.cwd = options.cwd || process.cwd();
   commandName = `${commandName} ${args.join(' ')}`;
+  if (options.verbose) {
+    console.log(`Running ${commandName}`); //eslint-disable-line no-console
+  }
   const output = exec(commandName, options, callback);
   if (options.log) {
     output.stdout.on('data', (data) => {
