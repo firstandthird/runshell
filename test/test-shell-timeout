@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 // just times out
-setTimeout(() => true, 10000);
+setTimeout(() => {
+  console.log('ALL DONE');
+}, 3000);

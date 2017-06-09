@@ -1,5 +1,5 @@
 'use strict';
-const exec = require('child_process').exec;
+const { spawn } = require('child_process');
 const obj2args = require('obj2args');
 
 // see
@@ -17,6 +17,7 @@ module.exports = (commandName, options, callback) => {
   if (typeof args === 'string') {
     args = [args];
   }
+  delete options.args;
   // properties in options.env will over-ride the default process.env:
   if (options.env) {
     options.env = Object.assign(process.env, options.env);
@@ -28,13 +29,41 @@ module.exports = (commandName, options, callback) => {
   if (options.verbose) {
     console.log(`Running ${commandName}`); //eslint-disable-line no-console
   }
-  const output = exec(commandName, options, callback);
-  if (options.log) {
-    output.stdout.on('data', (data) => {
+
+  options.shell = true;
+  options.setsid = true;
+
+  const cmd = spawn(commandName, options);
+  const outputdata = [];
+  const outputerr = [];
+  cmd.stdout.on('data', (data) => {
+    outputdata.push(data);
+    if (options.log) {
       console.log(data.toString()); // eslint-disable-line no-console
-    });
-    output.stderr.on('data', (data) => {
+    }
+  });
+  cmd.stderr.on('data', (data) => {
+    outputerr.push(data);
+    if (options.log) {
       console.log(data.toString()); // eslint-disable-line no-console
-    });
+    }
+  });
+
+  cmd.on('error', (err) => {
+    console.log('ERROR: ', err); // eslint-disable-line no-console
+  });
+
+  cmd.on('exit', (code, signal) => {
+    if (code !== 0) {
+      return callback({ code, signal, err: outputerr.join(''), msg: 'An error occured' });
+    }
+
+    callback(null, outputdata.join(''));
+  });
+
+  if (options.timeout) {
+    setTimeout(() => {
+      cmd.kill();
+    }, options.timeout);
   }
 };
