@@ -25,16 +25,16 @@ test('runs shellmmands', (t) => {
 
 test('can log output', (t) => {
   t.plan(3);
-  const oldLog = console.log;
+  const oldLog = console.log; // eslint-disable-line no-console
   const alldata = [];
-  console.log = (data) => {
+  console.log = (data) => { // eslint-disable-line no-console
     alldata.push(data);
   };
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
     log: true
   }, (err, data) => {
-    console.log = oldLog;
+    console.log = oldLog; // eslint-disable-line no-console
     t.equal(err, null);
     t.equal(data, 'test\n');
     t.equal(alldata[0], 'test\n');
