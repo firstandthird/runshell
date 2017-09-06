@@ -34,6 +34,9 @@ module.exports = (commandName, options, callback) => {
   options.setsid = true;
 
   const cmd = spawn(commandName, options);
+  if (options.returnCmd) {
+    return cmd;
+  }
   const outputdata = [];
   const outputerr = [];
   cmd.stdout.on('data', (data) => {
