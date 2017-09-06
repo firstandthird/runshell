@@ -66,4 +66,5 @@ module.exports = (commandName, options, callback) => {
       cmd.kill();
     }, options.timeout);
   }
+  return cmd;
 };
