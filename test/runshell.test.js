@@ -41,6 +41,16 @@ test('can log output', (t) => {
   });
 });
 
+test('can log output with a custom logger', (t) => {
+  t.plan(1);
+  runshell('node', {
+    args: path.join(__dirname, 'expected', 'script1.js'),
+    logger: (msg) => {
+      t.equal(msg, 'test\n');
+    }
+  }, () => {});
+});
+
 test('runs an executable script file', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
   }, (err, dataStr) => {

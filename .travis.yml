@@ -4,6 +4,5 @@ before_script:
  - chmod +x test/test-shell-timeout
 language: node_js
 node_js:
+  - "8"
   - "6"
-  - "5"
-  - "4"

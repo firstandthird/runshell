@@ -32,6 +32,10 @@ module.exports = (commandName, options, callback) => {
 
   options.shell = true;
   options.setsid = true;
+  // if a custom logger was specified, assume options.log is true:
+  options.log = options.log || options.logger;
+  // default logger is console.log or you can pass a custom one:
+  options.logger = options.logger || console.log;
 
   const cmd = spawn(commandName, options);
   const outputdata = [];
@@ -39,18 +43,18 @@ module.exports = (commandName, options, callback) => {
   cmd.stdout.on('data', (data) => {
     outputdata.push(data);
     if (options.log) {
-      console.log(data.toString()); // eslint-disable-line no-console
+      options.logger(data.toString()); // eslint-disable-line no-console
     }
   });
   cmd.stderr.on('data', (data) => {
     outputerr.push(data);
     if (options.log) {
-      console.log(data.toString()); // eslint-disable-line no-console
+      options.logger(data.toString());
     }
   });
 
   cmd.on('error', (err) => {
-    console.log('ERROR: ', err); // eslint-disable-line no-console
+    options.logger('ERROR: ', err);
   });
 
   cmd.on('exit', (code, signal) => {
