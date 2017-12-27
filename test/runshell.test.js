@@ -1,9 +1,9 @@
 'use strict';
-const test = require('tape');
+const tap = require('tap');
 const path = require('path');
 const runshell = require('../index.js');
 
-test('runs shellmmands', (t) => {
+tap.test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
@@ -13,7 +13,7 @@ test('runs shellmmands', (t) => {
   });
 });
 
-test('runs shellmmands', (t) => {
+tap.test('runs shellmmands', (t) => {
   t.plan(2);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
@@ -23,7 +23,7 @@ test('runs shellmmands', (t) => {
   });
 });
 
-test('can log output', (t) => {
+tap.test('can log output', (t) => {
   t.plan(3);
   const oldLog = console.log; // eslint-disable-line no-console
   const alldata = [];
@@ -41,7 +41,7 @@ test('can log output', (t) => {
   });
 });
 
-test('can log output with a custom logger', (t) => {
+tap.test('can log output with a custom logger', (t) => {
   t.plan(1);
   runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
@@ -51,7 +51,7 @@ test('can log output with a custom logger', (t) => {
   }, () => {});
 });
 
-test('runs an executable script file', (t) => {
+tap.test('runs an executable script file', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
   }, (err, dataStr) => {
     t.equal(err, null);
@@ -59,7 +59,7 @@ test('runs an executable script file', (t) => {
   });
 });
 
-test('runs an executable with args passed as object', (t) => {
+tap.test('runs an executable with args passed as object', (t) => {
   runshell(path.join(__dirname, 'test-shell'), {
     args: { v: 'another_thing', a: 'thing' }
   }, (err, dataStr) => {
@@ -72,7 +72,7 @@ test('runs an executable with args passed as object', (t) => {
   });
 });
 
-test('handles the "timeout" option', (t) => {
+tap.test('handles the "timeout" option', (t) => {
   runshell(path.join(__dirname, 'test-shell-timeout'), {
     timeout: 1000
   }, (err, dataStr) => {
@@ -82,7 +82,7 @@ test('handles the "timeout" option', (t) => {
   });
 });
 
-test('layers process.env into env', (t) => {
+tap.test('layers process.env into env', (t) => {
   runshell(path.join(__dirname, 'test-shell2'), {
   }, (err, dataStr) => {
     t.equal(err, null);
@@ -105,7 +105,7 @@ test('layers process.env into env', (t) => {
   });
 });
 
-test('handles errors', (t) => {
+tap.test('handles errors', (t) => {
   t.plan(1);
   runshell('node', {
     args: 'no!'

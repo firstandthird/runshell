@@ -4,7 +4,7 @@
   "description": "Library to execute a shell command",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.test.js",
+    "test": "tap test/*.test.js",
     "lint": "eslint ."
   },
   "repository": {
@@ -28,7 +28,7 @@
     "eslint": "^3.10.2",
     "eslint-config-firstandthird": "^3.0.2",
     "eslint-plugin-import": "^2.2.0",
-    "tape": "^4.6.3"
+    "tap": "^11.0.1"
   },
   "eslintConfig": {
     "extends": "firstandthird"
