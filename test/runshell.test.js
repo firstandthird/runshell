@@ -4,13 +4,6 @@ const path = require('path');
 const runshell = require('../index.js');
 
 tap.test('runs shellmmands', async(t) => {
-  const { results } = await runshell('node', {
-    args: path.join(__dirname, 'expected', 'script1.js')
-  });
-  t.equal(results, 'test\n');
-});
-
-tap.test('runs shellmmands', async(t) => {
   t.plan(1);
   const { results } = await runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
@@ -71,15 +64,6 @@ tap.test('handles the "timeout" option', async(t) => {
   }
 });
 
-tap.test('handles the "onMessage" option', async(t) => {
-  const { childProcess } = await runshell(path.join(__dirname, 'test-shell-timeout'), {
-    onMessage: (msg) => {
-      t.equal(typeof msg, 'string');
-    }
-  });
-  t.end();
-});
-
 tap.test('layers process.env into env', async(t) => {
   const results1 = await runshell(path.join(__dirname, 'test-shell2'), {});
   t.equal(results1.results.indexOf(process.env.HOME) > -1, true, 'takes process.env by default');
@@ -109,4 +93,14 @@ tap.test('resolves childProcess, code and result', async (t) => {
   t.equal(typeof childProcess, 'object');
   t.equal(typeof code, 'number');
   t.equal(typeof results, 'string');
+});
+
+tap.test('handles the "onMessage" option', async(t) => {
+  t.plan(1);
+  await runshell(path.join(__dirname, 'test-shell-ipc'), {
+    onMessage: (msg) => {
+      t.equal(msg, 'hello');
+      t.end();
+    }
+  });
 });

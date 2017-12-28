@@ -1,5 +1,6 @@
 'use strict';
-const { spawn } = require('child_process');
+// const { fork } = require('child_process');
+const cp = require('child_process');
 const joi = require('joi');
 const obj2args = require('obj2args');
 
@@ -24,7 +25,6 @@ module.exports = (commandName, options) => {
   } else {
     options.env = process.env;
   }
-  options.cwd = options.cwd || process.cwd();
 
   // if a custom logger was specified, assume options.log is true:
   if (!options.log) {
@@ -34,10 +34,10 @@ module.exports = (commandName, options) => {
   }
   // default logger is console.log or you can pass a custom one:
   options.logger = options.logger || console.log;
-
   const validation = joi.validate(options, joi.object({
+    silent: joi.boolean().default(true),
     env: joi.object(),
-    cwd: joi.string(),
+    cwd: joi.string().default(process.cwd()),
     logger: joi.func(),
     verbose: joi.boolean().optional(),
     shell: joi.boolean().default(true),
@@ -54,11 +54,16 @@ module.exports = (commandName, options) => {
   if (options.verbose) {
     console.log(`Running ${commandName}`); //eslint-disable-line no-console
   }
-  const cmd = spawn(commandName, validation.value);
+  // launch with fork if IPC was requested:
+  const launch = options.onMessage ? cp.fork : cp.spawn;
+  const cmd = launch(commandName, validation.value);
   const outputdata = [];
   const outputerr = [];
 
   return new Promise((resolve, reject) => {
+    if (options.onMessage) {
+      cmd.on('message', options.onMessage);
+    }
     cmd.stdout.on('data', (data) => {
       outputdata.push(data);
       if (options.log) {
@@ -87,10 +92,6 @@ module.exports = (commandName, options) => {
         results: outputdata.join('')
       });
     });
-
-    if (options.onMessage) {
-      cmd.on('message', options.onMessage);
-    }
 
     if (options.timeout) {
       setTimeout(() => {
