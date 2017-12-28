@@ -49,8 +49,9 @@ module.exports = (commandName, options) => {
   if (validation.error) {
     throw validation.error;
   }
-
-  commandName = `${commandName} ${args.join(' ')}`;
+  if (args.length > 0) {
+    commandName = `${commandName} ${args.join(' ')}`;
+  }
   if (options.verbose) {
     console.log(`Running ${commandName}`); //eslint-disable-line no-console
   }
