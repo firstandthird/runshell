@@ -5,36 +5,37 @@ const joi = require('joi');
 const obj2args = require('obj2args');
 
 // see
-// https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
-// for additional options
+// https://nodejs.org/api/child_process.html#child_process_child_process
+// for additional information
 
-module.exports = (commandName, options) => {
+module.exports = (commandName, opts) => {
   // second argument is optional:
-  if (!options) {
-    options = {};
+  if (!opts) {
+    opts = {};
   }
-  let args = options.args ? obj2args(options.args) : [];
+  let args = opts.args ? obj2args(opts.args) : [];
   // make sure args is an array:
   if (typeof args === 'string') {
     args = [args];
   }
-  delete options.args;
-  // properties in options.env will over-ride the default process.env:
-  if (options.env) {
-    options.env = Object.assign(process.env, options.env);
+  delete opts.args;
+  // properties in opts.env will over-ride the default process.env:
+  if (opts.env) {
+    opts.env = Object.assign(process.env, opts.env);
   } else {
-    options.env = process.env;
+    opts.env = process.env;
   }
 
-  // if a custom logger was specified, assume options.log is true:
-  if (!options.log) {
-    if (options.logger) {
-      options.log = true;
+  // if a custom logger was specified, assume opts.log is true:
+  if (!opts.log) {
+    if (opts.logger) {
+      opts.log = true;
     }
   }
   // default logger is console.log or you can pass a custom one:
-  options.logger = options.logger || console.log;
-  const validation = joi.validate(options, joi.object({
+  opts.logger = opts.logger || console.log;
+  const validation = joi.validate(opts, joi.object({
+    // 'silent' mode guarantees stdon/stdout/stderr handlers are available when using fork:
     silent: joi.boolean().default(true),
     env: joi.object(),
     cwd: joi.string().default(process.cwd()),
@@ -49,6 +50,7 @@ module.exports = (commandName, options) => {
   if (validation.error) {
     throw validation.error;
   }
+  const options = validation.value;
   if (args.length > 0) {
     commandName = `${commandName} ${args.join(' ')}`;
   }
@@ -57,7 +59,7 @@ module.exports = (commandName, options) => {
   }
   // launch with fork if IPC was requested:
   const launch = options.onMessage ? cp.fork : cp.spawn;
-  const cmd = launch(commandName, validation.value);
+  const cmd = launch(commandName, options);
   const outputdata = [];
   const outputerr = [];
 
