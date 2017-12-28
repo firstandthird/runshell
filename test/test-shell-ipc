@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+// sends an IPC to parent then times out:
+process.send('hello');
+setTimeout(() => {
+  console.log('ALL DONE');
+}, 3000);
