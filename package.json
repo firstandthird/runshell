@@ -22,12 +22,13 @@
   },
   "homepage": "https://github.com/firstandthird/runshell#readme",
   "dependencies": {
+    "joi": "^13.0.2",
     "obj2args": "^1.1.0"
   },
   "devDependencies": {
-    "eslint": "^3.10.2",
-    "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint": "^4.14.0",
+    "eslint-config-firstandthird": "^4.3.0",
+    "eslint-plugin-import": "^2.8.0",
     "tap": "^11.0.1"
   },
   "eslintConfig": {

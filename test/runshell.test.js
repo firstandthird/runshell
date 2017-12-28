@@ -3,113 +3,110 @@ const tap = require('tap');
 const path = require('path');
 const runshell = require('../index.js');
 
-tap.test('runs shellmmands', (t) => {
-  t.plan(2);
-  runshell('node', {
-    args: path.join(__dirname, 'expected', 'script1.js'),
-  }, (err, data) => {
-    t.equal(err, null);
-    t.equal(data, 'test\n');
+tap.test('runs shellmmands', async(t) => {
+  const { results } = await runshell('node', {
+    args: path.join(__dirname, 'expected', 'script1.js')
   });
+  t.equal(results, 'test\n');
 });
 
-tap.test('runs shellmmands', (t) => {
-  t.plan(2);
-  runshell('node', {
+tap.test('runs shellmmands', async(t) => {
+  t.plan(1);
+  const { results } = await runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
-  }, (err, data) => {
-    t.equal(err, null);
-    t.equal(data, 'test\n');
   });
+  t.equal(results, 'test\n');
 });
 
-tap.test('can log output', (t) => {
-  t.plan(3);
+tap.test('can log output', async(t) => {
+  t.plan(2);
   const oldLog = console.log; // eslint-disable-line no-console
   const alldata = [];
-  console.log = (data) => { // eslint-disable-line no-console
-    alldata.push(data);
+  console.log = (results) => { // eslint-disable-line no-console
+    alldata.push(results);
   };
-  runshell('node', {
+  const { results } = await runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
     log: true
-  }, (err, data) => {
-    console.log = oldLog; // eslint-disable-line no-console
-    t.equal(err, null);
-    t.equal(data, 'test\n');
-    t.equal(alldata[0], 'test\n');
   });
+  console.log = oldLog; // eslint-disable-line no-console
+  t.equal(results, 'test\n');
+  t.equal(alldata[0], 'test\n');
 });
 
-tap.test('can log output with a custom logger', (t) => {
+tap.test('can log output with a custom logger', async(t) => {
   t.plan(1);
-  runshell('node', {
+  await runshell('node', {
     args: path.join(__dirname, 'expected', 'script1.js'),
     logger: (msg) => {
       t.equal(msg, 'test\n');
     }
-  }, () => {});
-});
-
-tap.test('runs an executable script file', (t) => {
-  runshell(path.join(__dirname, 'test-shell'), {
-  }, (err, dataStr) => {
-    t.equal(err, null);
-    t.end();
   });
 });
 
-tap.test('runs an executable with args passed as object', (t) => {
-  runshell(path.join(__dirname, 'test-shell'), {
+tap.test('runs an executable script file', async(t) => {
+  await runshell(path.join(__dirname, 'test-shell'), {
+  });
+});
+
+tap.test('runs an executable with args passed as object', async(t) => {
+  const { results } = await runshell(path.join(__dirname, 'test-shell'), {
     args: { v: 'another_thing', a: 'thing' }
-  }, (err, dataStr) => {
-    t.equal(err, null);
-    t.equal(dataStr.indexOf('-a') > -1, true);
-    t.equal(dataStr.indexOf('thing') > -1, true);
-    t.equal(dataStr.indexOf('-v') > -1, true);
-    t.equal(dataStr.indexOf('another_thing') > -1, true);
-    t.end();
   });
+  t.equal(results.indexOf('-a') > -1, true);
+  t.equal(results.indexOf('thing') > -1, true);
+  t.equal(results.indexOf('-v') > -1, true);
+  t.equal(results.indexOf('another_thing') > -1, true);
+  t.end();
 });
 
-tap.test('handles the "timeout" option', (t) => {
-  runshell(path.join(__dirname, 'test-shell-timeout'), {
-    timeout: 1000
-  }, (err, dataStr) => {
-    t.notEqual(err);
+tap.test('handles the "timeout" option', async(t) => {
+  try {
+    await runshell(path.join(__dirname, 'test-shell-timeout'), {
+      timeout: 1000
+    });
+  } catch (err) {
     t.equal(err.signal, 'SIGTERM');
     t.end();
-  });
+  }
 });
 
-tap.test('layers process.env into env', (t) => {
-  runshell(path.join(__dirname, 'test-shell2'), {
-  }, (err, dataStr) => {
-    t.equal(err, null);
-    t.equal(dataStr.indexOf(process.env.HOME) > -1, true, 'takes process.env by default');
-    runshell(path.join(__dirname, 'test-shell2'), {
-      env: { firstandthird_runshell: 'firstandthird_runshell' }
-    }, (err2, dataStr2) => {
-      t.equal(err2, null);
-      t.equal(dataStr2.indexOf(process.env.HOME) > -1, true);
-      t.equal(dataStr2.indexOf('firstandthird_runshell') > -1, true, 'combines process.env with passed env');
-      const oldHome = process.env.HOME;
-      runshell(path.join(__dirname, 'test-shell2'), {
-        env: { HOME: 'firstandthird_runshell' }
-      }, (err3, dataStr3) => {
-        t.equal(err3, null);
-        t.equal(dataStr3.indexOf(oldHome), -1, 'passed env will over-ride process.env');
-        t.end();
-      });
-    });
+tap.test('handles the "onMessage" option', async(t) => {
+  const { childProcess } = await runshell(path.join(__dirname, 'test-shell-timeout'), {
+    onMessage: (msg) => {
+      t.equal(typeof msg, 'string');
+    }
   });
+  t.end();
 });
 
-tap.test('handles errors', (t) => {
+tap.test('layers process.env into env', async(t) => {
+  const results1 = await runshell(path.join(__dirname, 'test-shell2'), {});
+  t.equal(results1.results.indexOf(process.env.HOME) > -1, true, 'takes process.env by default');
+  const results2 = await runshell(path.join(__dirname, 'test-shell2'), { env: { firstandthird_runshell: 'firstandthird_runshell' } });
+  t.equal(results2.results.indexOf(process.env.HOME) > -1, true);
+  t.equal(results2.results.indexOf('firstandthird_runshell') > -1, true, 'combines process.env with passed env');
+  const oldHome = process.env.HOME;
+  const results3 = await runshell(path.join(__dirname, 'test-shell2'), { env: { HOME: 'firstandthird_runshell' } });
+  t.equal(results3.results.indexOf(oldHome), -1, 'passed env will over-ride process.env');
+  t.end();
+});
+
+tap.test('handles errors', async(t) => {
   t.plan(1);
-  runshell('node', {
-    args: 'no!'
-  }, (err, data) => {
+  try {
+    await runshell('node', { args: 'no!' });
+  } catch (err) {
     t.notEqual(err, null);
+  }
+});
+
+tap.test('resolves childProcess, code and result', async (t) => {
+  t.plan(3);
+  const { childProcess, code, results } = await runshell('node', {
+    args: path.join(__dirname, 'expected', 'script1.js')
   });
+  t.equal(typeof childProcess, 'object');
+  t.equal(typeof code, 'number');
+  t.equal(typeof results, 'string');
 });
