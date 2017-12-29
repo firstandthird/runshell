@@ -2,7 +2,8 @@ before_script:
  - chmod +x test/test-shell
  - chmod +x test/test-shell2
  - chmod +x test/test-shell-timeout
+ - chmod +x test/test-shell-ipc
 language: node_js
 node_js:
+  - "9"
   - "8"
-  - "6"
