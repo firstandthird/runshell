@@ -21,7 +21,7 @@ module.exports = (commandName, opts) => {
   delete opts.args;
   // properties in opts.env will over-ride the default process.env:
   if (opts.env) {
-    opts.env = Object.assign(process.env, opts.env);
+    opts.env = Object.assign({}, process.env, opts.env);
   } else {
     opts.env = process.env;
   }
